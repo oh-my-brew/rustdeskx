@@ -33,4 +33,5 @@ provisioning profile 或解码文件提交到仓库、写入工作流或上传�
 3. 创建并推送与配置一致的签名标签，例如
    `git tag -s v1.4.9.3 -m "RustDeskX 1.4.9.3"`。
 4. Release 工作流下载并校验上游 DMG，重品牌、签名、公证和发布 ZIP。
-5. 用 Release ZIP 的 SHA-256 更新 `oh-my-brew/homebrew-tap/Casks/rustdeskx.rb`。
+5. 核对 Release 说明包含准确上游源码与本次包装源码链接，保留AGPL许可和上游声明。
+6. Tap通过独立定时Autobump发现稳定Release；纯版本更新的资产校验与自动合并遵循Tap的 `RELEASES.md`，不手工改Cask模拟自动化，也不自动升级设备。

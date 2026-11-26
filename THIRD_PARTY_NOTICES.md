@@ -5,10 +5,10 @@
 RustDeskX redistributes a modified application bundle derived from the official RustDesk macOS arm64 release.
 
 - Project: RustDesk
-- Corresponding upstream source: https://github.com/rustdesk/rustdesk/tree/1.4.9
-- Source archive: https://github.com/rustdesk/rustdesk/archive/refs/tags/1.4.9.tar.gz
-- Pinned release: 1.4.9
-- License: GNU Affero General Public License v3.0 (AGPL-3.0); see [LICENSE](LICENSE) and the [upstream license](https://github.com/rustdesk/rustdesk/blob/1.4.9/LICENCE)
+- Corresponding upstream source: https://github.com/rustdesk/rustdesk/tree/1.5.3
+- Source archive: https://github.com/rustdesk/rustdesk/archive/refs/tags/1.5.3.tar.gz
+- Pinned release: 1.5.3
+- License: GNU Affero General Public License v3.0 (AGPL-3.0); see [LICENSE](LICENSE) and the [upstream license](https://github.com/rustdesk/rustdesk/blob/1.5.3/LICENCE)
 - Upstream copyright notices remain in the application bundle.
 
 The modifications performed by this repository are limited to application naming, bundle identifier, URL scheme, executable filename, code signing, notarization, and packaging. RustDeskX is not affiliated with or endorsed by the RustDesk project.

@@ -7,7 +7,7 @@ RustDeskX 是面向 Apple Silicon Mac 的 RustDesk 个人重品牌发行包：
 - 主执行文件：`RustDeskX`
 - 架构：仅 `arm64`
 - 发行：Developer ID 签名并经 Apple 公证
-- 上游版本：RustDesk 1.4.9
+- 上游版本：RustDesk 1.5.3
 
 本仓库不修改 RustDesk 的远程桌面协议或绕过任何安全机制。构建流程固定校验官方 arm64 DMG 的 SHA-256，然后修改应用包元数据并完整重签。
 
@@ -41,11 +41,11 @@ CODE_SIGN_IDENTITY=- Scripts/package-release.sh
 ```
 
 上述命令生成本地 ad-hoc 验证包，会下载上游 DMG 并写入 `dist/`，不用于正式分发或替换已安装应用。
-正式发行使用 `<上游版本>.<修订号>` 标签，例如 `v1.4.9.3`；签名、公证与发布步骤见 [DISTRIBUTION.md](DISTRIBUTION.md)。
+正式发行使用 `v<上游版本>.<修订号>` 标签，例如 `v1.5.3.1`。签名、公证与发布步骤见 [DISTRIBUTION.md](DISTRIBUTION.md)。
 
 ## 上游与许可
 
-RustDesk 1.4.9 使用 GNU Affero General Public License v3.0（AGPL-3.0），许可证全文见 [LICENSE](LICENSE)。
-对应[上游源码](https://github.com/rustdesk/rustdesk/tree/1.4.9)、重品牌改动及构建入口见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。RustDeskX 与 RustDesk 官方项目没有隶属或背书关系。
+RustDesk 1.5.3 使用 GNU Affero General Public License v3.0（AGPL-3.0），许可证全文见 [LICENSE](LICENSE)。
+对应[上游源码](https://github.com/rustdesk/rustdesk/tree/1.5.3)、重品牌改动及构建入口见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。RustDeskX 与 RustDesk 官方项目没有隶属或背书关系。
 
 助手维护约定见 [AGENTS.md](AGENTS.md)。

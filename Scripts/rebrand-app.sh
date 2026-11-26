@@ -27,6 +27,18 @@ OUTPUT_BUILD_VERSION="${UPSTREAM_BUILD_VERSION}.${RELEASE_REVISION}"
 OLD_EXECUTABLE="$(/usr/bin/plutil -extract CFBundleExecutable raw "$SOURCE_PLIST")"
 [[ -x "$SOURCE_APP/Contents/MacOS/$OLD_EXECUTABLE" ]] || die "source executable is missing"
 
+/usr/bin/codesign --verify --deep --strict "$SOURCE_APP"
+ENTITLEMENTS_FILE="$(/usr/bin/mktemp "${TMPDIR:-/tmp}/rustdeskx-entitlements.XXXXXX")"
+trap '/bin/rm -f -- "$ENTITLEMENTS_FILE"' EXIT
+
+app_entitlements() {
+  /usr/bin/codesign --display --entitlements - --xml "$1" | /usr/bin/plutil -convert xml1 -o - -
+}
+
+app_entitlements "$SOURCE_APP" > "$ENTITLEMENTS_FILE"
+[[ "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.device.audio-input' "$ENTITLEMENTS_FILE")" == true ]] \
+  || die "upstream microphone entitlement is missing"
+
 /bin/mkdir -p "$(dirname "$OUTPUT_APP")"
 /usr/bin/ditto "$SOURCE_APP" "$OUTPUT_APP"
 /usr/bin/xattr -cr "$OUTPUT_APP"
@@ -64,10 +76,10 @@ fi
 sign_path() {
   if [[ -n "${CODE_SIGN_KEYCHAIN:-}" ]]; then
     /usr/bin/codesign --force --sign "$SIGN_IDENTITY" --options runtime \
-      "${TIMESTAMP_ARGS[@]}" --keychain "$CODE_SIGN_KEYCHAIN" "$1"
+      "${TIMESTAMP_ARGS[@]}" --keychain "$CODE_SIGN_KEYCHAIN" "$@"
   else
     /usr/bin/codesign --force --sign "$SIGN_IDENTITY" --options runtime \
-      "${TIMESTAMP_ARGS[@]}" "$1"
+      "${TIMESTAMP_ARGS[@]}" "$@"
   fi
 }
 
@@ -92,8 +104,10 @@ while IFS= read -r -d '' bundle; do
 done < <(/usr/bin/find "$OUTPUT_APP/Contents" -depth -type d \
   \( -name '*.framework' -o -name '*.xpc' -o -name '*.appex' -o -name '*.plugin' -o -name '*.app' \) -print0)
 
-sign_path "$OUTPUT_APP"
+sign_path --entitlements "$ENTITLEMENTS_FILE" "$OUTPUT_APP"
 /usr/bin/codesign --verify --deep --strict --verbose=2 "$OUTPUT_APP"
+app_entitlements "$OUTPUT_APP" | /usr/bin/cmp -s "$ENTITLEMENTS_FILE" - \
+  || die "signed app entitlements differ from upstream"
 
 ACTUAL_ID="$(/usr/bin/plutil -extract CFBundleIdentifier raw "$OUTPUT_PLIST")"
 ACTUAL_EXECUTABLE="$(/usr/bin/plutil -extract CFBundleExecutable raw "$OUTPUT_PLIST")"

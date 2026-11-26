@@ -16,7 +16,7 @@ concurrency:
 jobs:
   package:
     name: Verify arm64 package
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 20
 
     steps:
@@ -41,4 +41,6 @@ jobs:
           test "$(plutil -extract CFBundleVersion raw dist/RustDeskX.app/Contents/Info.plist)" = "${UPSTREAM_BUILD_VERSION}.${RELEASE_REVISION}"
           test "$(lipo -archs dist/RustDeskX.app/Contents/MacOS/RustDeskX)" = "arm64"
           codesign --verify --deep --strict --verbose=2 dist/RustDeskX.app
+          codesign --display --entitlements - --xml dist/RustDeskX.app > "$RUNNER_TEMP/rustdeskx-entitlements.plist"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.device.audio-input' "$RUNNER_TEMP/rustdeskx-entitlements.plist")" = true
           (cd dist && shasum -a 256 -c "RustDeskX-$VERSION-arm64.zip.sha256")

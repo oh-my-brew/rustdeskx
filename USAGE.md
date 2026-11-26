@@ -47,7 +47,9 @@ Bundle ID 与官方 RustDesk 不同，因此官方应用原有权限不会继承
 - macOS 的屏幕录制和辅助功能权限已授予。
 - 被控 Mac 未关机，并能通过 Tailscale 到达。
 
-当前发行包修改的是官方已编译 arm64 应用的包元数据。主程序与 Direct IP 功能可独立使用，但上游二进制内部仍可能保留 RustDesk 服务名、安装路径和更新逻辑；对登录窗口控制、系统级后台服务或官方自动更新有强需求时，应改用完整源码白标构建。
+RustDeskX 可以在用户登录后运行并接受 Direct IP 连接。上游系统服务和部分进程间通信使用 `/Applications/RustDesk.app` 下的路径。需要在重启后、用户登录前接入时，应单独验证系统服务。
+
+使用本项目 Release 或 Homebrew 的 `brew upgrade --cask rustdeskx` 更新。应用内的官方静默更新依赖上游系统服务，使用 RustDeskX 时请保持该选项关闭。
 
 ## 连通性排查
 

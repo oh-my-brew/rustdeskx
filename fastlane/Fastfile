@@ -26,9 +26,14 @@ platform :mac do
 
     escaped_version = Shellwords.escape(version)
     escaped_tag = Shellwords.escape(tag)
-    notes = "Apple Silicon only. Signed with Developer ID and notarized by Apple. " \
-            "Built from the verified RustDesk #{config.fetch('UPSTREAM_VERSION')} upstream arm64 " \
-            "package with RustDeskX bundle metadata."
+    upstream_version = config.fetch("UPSTREAM_VERSION")
+    notes = <<~MARKDOWN
+      Apple Silicon only. Built from the verified RustDesk #{upstream_version} arm64 DMG, signed with Developer ID and notarized by Apple.
+
+      - [RustDesk #{upstream_version} source](https://github.com/rustdesk/rustdesk/tree/#{upstream_version})
+      - [RustDeskX #{version} packaging source](https://github.com/oh-my-brew/rustdeskx/tree/#{tag})
+      - [AGPL-3.0 and third-party notices](https://github.com/oh-my-brew/rustdeskx/blob/#{tag}/THIRD_PARTY_NOTICES.md)
+    MARKDOWN
 
     shared_macos_developer_id(
       app_identifiers: ["com.omzcj.rustdeskx"],
